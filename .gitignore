@@ -1,0 +1,47 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Output of the go build
+/myapp
+/main
+/build/
+/bin/
+/dist/
+
+# Dependency directories (if you're not using Go modules)
+vendor/
+
+# Go workspace file (Go 1.18+)
+go.work
+go.work.sum
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE/editor folders
+.idea/
+.vscode/
+*.swp
+
+# Air live-reload tool
+.air
+.air.toml
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+
+# Environment files
+.env
+.env.*

@@ -14,14 +14,13 @@ type UserRepositoryImpl struct {
 
 func (ur *UserRepositoryImpl) Create(user user.UserEntity, password string) error {
 
-	err := ur.Db.Create(&models.UserModel{
+	if err := ur.Db.Create(&models.UserModel{
 		// CreatedAt:time.Now(),UpdatedAt:time.Now(),
 		Username:    user.Username,
 		Displayname: user.Displayname,
 		Email:       user.Email,
 		Password:    password,
-	})
-	if err != nil {
+	}); err.Error != nil {
 		return fmt.Errorf("failed to create user: %s", err.Error)
 	}
 	return nil
@@ -64,9 +63,10 @@ func (ur *UserRepositoryImpl) Delete(id int) error {
 func (ur UserRepositoryImpl) GetByUsername(username string) (*user.UserEntity, error) {
 	var usr models.UserModel
 	if err := ur.Db.Where("username = ?", username).First(&usr); err.Error != nil {
-		print(err.Error)
-		return nil, fmt.Errorf("user by %s no found: %s", username, err.Error)
+
+		return nil, fmt.Errorf("/nuser by %s no found: %s/n", username, err.Error)
 	}
+	fmt.Printf("log %s", usr.Displayname)
 	ue := user.UserEntity{
 		ID:          usr.ID,
 		Username:    usr.Username,
@@ -92,4 +92,23 @@ func (ur *UserRepositoryImpl) Authenticate(username string, passwdHash string) (
 	}
 	return nil, fmt.Errorf("incorect password for user %s ", username)
 
+}
+
+func (ur UserRepositoryImpl) GetAll() ([]*user.UserEntity, error) {
+	var users []models.UserModel
+	result := ur.Db.Find(&users)
+	if result.Error != nil {
+		return nil, result.Error
+	} else {
+		var ues []*user.UserEntity
+		for i := 0; i < int(result.RowsAffected); i++ {
+			ues = append(ues, &user.UserEntity{
+				ID:          users[i].ID,
+				Username:    users[i].Username,
+				Displayname: users[i].Displayname,
+				Email:       users[i].Email,
+			})
+		}
+		return ues, nil
+	}
 }

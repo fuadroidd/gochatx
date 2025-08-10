@@ -1,8 +1,8 @@
 package user
 
 import (
-	"errors"
 	"fmt"
+	"gochatx/internal/user/dtos"
 )
 
 type UserUsecase struct {
@@ -17,9 +17,8 @@ func (u *UserUsecase) Register(user UserEntity, password string) error {
 	_, err := u.Repo.GetByUsername(user.Username)
 	if err == nil {
 		return fmt.Errorf("user already exists %s", err)
-	}
-	if err := u.Repo.Create(user, password); err != nil {
-		return errors.New("unable to create new user")
+	} else if err := u.Repo.Create(user, password); err != nil {
+		return fmt.Errorf("usecases call service error: %s", err)
 	}
 	return nil
 }
@@ -41,4 +40,23 @@ func (u *UserUsecase) Authenticate(username string, password string) (*UserEntit
 		return user, nil
 	}
 	return nil, fmt.Errorf("invalid username and password")
+}
+func (u UserUsecase) GetAll() ([]*dtos.UserResponseDTO, error) {
+
+	if users, err := u.Repo.GetAll(); err == nil {
+		var udtos []*dtos.UserResponseDTO
+		for i := 0; i < len(users); i++ {
+			udtos = append(udtos, &dtos.UserResponseDTO{
+				ID:          users[i].ID,
+				Username:    users[i].Username,
+				Displayname: users[i].Displayname,
+				Email:       users[i].Email,
+			})
+		}
+		return udtos, nil
+	} else {
+
+		return nil, err
+	}
+
 }

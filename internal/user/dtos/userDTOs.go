@@ -13,3 +13,8 @@ type UserResponseDTO struct {
 	Displayname string `json:"display_name"`
 	Email       string `json:"email"`
 }
+
+type UserLoginRequestDTO struct {
+	Username string `form:"username"`
+	Password string `fomr:"password"`
+}

@@ -8,10 +8,10 @@ import (
 
 type MessageEntity struct {
 	gorm.Model
-	Id        int
-	RoomId    int
-	SenderId  int
-	Text      string
-	TimeStamp time.Time
-	FileLink  string
+	ID         uint
+	SenderID   uint
+	ReceiverID *uint
+	RoomID     *uint
+	Text       string
+	TimeStamp  time.Time
 }

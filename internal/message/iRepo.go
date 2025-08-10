@@ -1,8 +1,8 @@
 package message
 
-type IChatRepo interface {
-	Get() MessageEntity
-	Create(newChat MessageEntity) MessageEntity
-	Update(id int, update MessageEntity) MessageEntity
-	Delete(id int)
+type IMessageRepo interface {
+	GetById(MessageID uint) (*MessageEntity, error)
+	GetByReceiverId(ReceiverID uint) ([]*MessageEntity, error)
+	GetByRoomId(roomID uint) ([]*MessageEntity, error)
+	Create(newMessage MessageEntity) error
 }

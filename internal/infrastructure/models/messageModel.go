@@ -12,5 +12,6 @@ type MessageModel struct {
 	SenderID   uint
 	ReceiverID *uint
 	RoomID     *uint
+	Text       string
 	CreatedAt  time.Time
 }

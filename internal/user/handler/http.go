@@ -23,6 +23,7 @@ func (u *UserHandler) Register(userReq dtos.UserRequestDTO) error {
 	if err := u.Uc.Register(newUser, password); err != nil {
 		return fmt.Errorf("failed to create user: %s", err.Error())
 	}
+	fmt.Printf("/nSuccessfully registered /n")
 
 	return nil
 }
@@ -44,4 +45,13 @@ func (u UserHandler) GetByUsername(username string) (*dtos.UserResponseDTO, erro
 		}, nil
 	}
 	return nil, fmt.Errorf("not found")
+}
+
+func (u UserHandler) GetAll() ([]*dtos.UserResponseDTO, error) {
+	if usrs, err := u.Uc.GetAll(); err == nil {
+		return usrs, nil
+	} else {
+
+		return nil, err
+	}
 }

@@ -1,29 +1,47 @@
 package message
 
-type CreateChatUsecase struct {
-	repo IChatRepo
+import (
+	messageDTOs "gochatx/internal/message/dtos"
+)
+
+type MessageUsecase struct {
+	Repo IMessageRepo
 }
 
-func (create *CreateChatUsecase) Execute(chat MessageEntity) MessageEntity {
-	newChat := create.repo.Create(chat)
-	return newChat
+func (uc MessageUsecase) SendMessage(messageReq messageDTOs.MessageRequestDTO) error {
+	newMessage := MessageEntity{
+		SenderID: messageReq.SenderID,
+		RoomID:   messageReq.ReceiverID,
+		Text:     messageReq.Text,
+	}
+	if err := uc.Repo.Create(newMessage); err != nil {
+		return nil
+	} else {
+		return err
+	}
 
 }
 
-type UpdateChatUsecase struct {
-	repo IChatRepo
+func (uc MessageUsecase) GetByRoomID(roomID uint) ([]*MessageEntity, error) {
+	if res, err := uc.Repo.GetByRoomId(roomID); err != nil {
+		return nil, err
+	} else {
+		return res, nil
+	}
 }
 
-func (update *UpdateChatUsecase) Execute(id int, updates MessageEntity) MessageEntity {
-	updated := update.repo.Update(id, updates)
-	return updated
+func (uc MessageUsecase) GetByReceiverId(receiverID uint) ([]*MessageEntity, error) {
+	if res, err := uc.Repo.GetByReceiverId(receiverID); err != nil {
+		return nil, err
+	} else {
+		return res, nil
+	}
 }
 
-type DeleteChatUsecase struct {
-	repo IChatRepo
-}
-
-func (delete *DeleteChatUsecase) Execute(id int) {
-	delete.repo.Delete(id)
-
+func (uc MessageUsecase) GetByID(id uint) (*MessageEntity, error) {
+	if res, err := uc.Repo.GetById(id); err != nil {
+		return nil, err
+	} else {
+		return res, nil
+	}
 }

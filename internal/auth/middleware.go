@@ -13,7 +13,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			if token, err := jwt.Parse(tokenstr, func(t *jwt.Token) (interface{}, error) {
 				return jwtSecret, nil
 			}); err == nil && token.Valid {
-				print("authorized")
 				claims := token.Claims.(jwt.MapClaims)
 				ctx.Set("username", claims["username"])
 				ctx.Next()

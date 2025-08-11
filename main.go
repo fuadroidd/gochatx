@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func mainRoutes(db *gorm.DB) {
+func mainUserRoutes(db *gorm.DB) {
 	userRepo := userRepo.UserRepositoryImpl{Db: db}
 	userUsecase := user.UserUsecase{Repo: &userRepo}
 	userHandler := handler.UserHandler{Uc: &userUsecase}
@@ -53,5 +53,5 @@ func main() {
 			fmt.Print(fmt.Errorf("migrations error %s", err))
 		}
 	}
-	mainRoutes(dbcon)
+	mainUserRoutes(dbcon)
 }
